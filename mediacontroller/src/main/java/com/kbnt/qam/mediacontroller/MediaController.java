@@ -7,6 +7,8 @@ import android.view.View;
 
 public class MediaController extends View {
 
+    private ControlListener controlListener;
+
     public MediaController(Context context) {
         this(context, null);
     }
@@ -21,5 +23,15 @@ public class MediaController extends View {
 
     public MediaController(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    public void setControlListener(ControlListener controlListener) {
+        this.controlListener = controlListener;
+    }
+
+    public interface ControlListener {
+        void play();
+
+        void pause();
     }
 }
