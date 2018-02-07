@@ -9,7 +9,7 @@ class ControlDetector {
 
     private static final String TAG = MediaController.class.getSimpleName();
 
-    private static final float SCROLL_PART = 0.15F;
+    private static final float SCROLL_BORDER = 0.15F;
     private static final int MAX_SCROLL_DEVIATION = 10;
 
     private MediaController.ControlListener controlListener;
@@ -17,7 +17,7 @@ class ControlDetector {
 
     private enum Status {PLAY, PAUSE}
 
-    private enum ScrollPlace {LEFT, RIGHT, OTHER}
+    private enum TouchPlace {LEFT, RIGHT, CENTER}
 
     private Status status;
 
@@ -81,7 +81,7 @@ class ControlDetector {
         @Override
         public boolean onDoubleTap(MotionEvent e) {
             Log.e(TAG, "onDoubleTap: ");
-            doubleTap();
+            doubleTap(e.getX());
             return super.onDoubleTap(e);
         }
 
@@ -130,9 +130,19 @@ class ControlDetector {
         }
     }
 
-    private void doubleTap() {
+    private void doubleTap(float pointX) {
         if (controlListener != null) {
-            controlListener.doubleTap();
+            final TouchPlace touchPlace = getTouchPlace(pointX, 0.4F);
+            switch (touchPlace) {
+                case LEFT:
+                    controlListener.jumpLeft();
+                    break;
+                case RIGHT:
+                    controlListener.jumpRight();
+                    break;
+                default:
+                    Log.e(TAG, "doubleTap: " + touchPlace.name());
+            }
         }
     }
 
@@ -144,7 +154,7 @@ class ControlDetector {
 
     private void scroll(float startX, float stopX, float distanceY) {
         if (controlListener != null && (stopX - startX) < MAX_SCROLL_DEVIATION) {
-            final ScrollPlace scrollPlace = getScrollPlace(startX, stopX);
+            final TouchPlace scrollPlace = getScrollPlace(startX, stopX);
             final int relativeDistance = getRelativeDistance(distanceY);
             switch (scrollPlace) {
                 case LEFT:
@@ -153,27 +163,27 @@ class ControlDetector {
                 case RIGHT:
                     controlListener.volume(relativeDistance);
                     break;
-                case OTHER:
+                default:
                     Log.e(TAG, "scroll: " + scrollPlace.name());
             }
         }
     }
 
-    private ScrollPlace getScrollPlace(float startX, float stopX) {
-        final ScrollPlace startTouch = getTouchPlace(startX);
-        final ScrollPlace stopTouch = getTouchPlace(stopX);
-        return startTouch.equals(stopTouch) ? startTouch : ScrollPlace.OTHER;
+    private TouchPlace getScrollPlace(float startX, float stopX) {
+        final TouchPlace startTouch = getTouchPlace(startX, SCROLL_BORDER);
+        final TouchPlace stopTouch = getTouchPlace(stopX, SCROLL_BORDER);
+        return startTouch.equals(stopTouch) ? startTouch : TouchPlace.CENTER;
     }
 
-    private ScrollPlace getTouchPlace(float pointX) {
+    private TouchPlace getTouchPlace(float pointX, float border) {
         final float width = view.getWidth();
-        if (pointX >= 0 && pointX <= width * SCROLL_PART) {
-            return ScrollPlace.LEFT;
+        if (pointX >= 0 && pointX <= width * border) {
+            return TouchPlace.LEFT;
         }
-        if (pointX >= width * (1 - SCROLL_PART) && pointX <= width) {
-            return ScrollPlace.RIGHT;
+        if (pointX >= width * (1 - border) && pointX <= width) {
+            return TouchPlace.RIGHT;
         }
-        return ScrollPlace.OTHER;
+        return TouchPlace.CENTER;
     }
 
     private int getRelativeDistance(float distanceY) {

@@ -34,11 +34,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void doubleTap() {
-            showMessage("doubleTap");
-        }
-
-        @Override
         public void longClick() {
             showMessage("longClick");
         }
@@ -53,6 +48,16 @@ public class MainActivity extends AppCompatActivity {
         public void volume(int value) {
             volume = Math.max(0, Math.min(volume + value, 100));
             showMessage("volume " + volume);
+        }
+
+        @Override
+        public void jumpLeft() {
+            showMessage("jumpLeft");
+        }
+
+        @Override
+        public void jumpRight() {
+            showMessage("jumpRight");
         }
     };
 
