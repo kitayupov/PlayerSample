@@ -3,19 +3,28 @@ package com.kbnt.qam.mediacontroller;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 
 class ControlDetector {
 
     private static final String TAG = MediaController.class.getSimpleName();
 
+    private static final float SCROLL_PART = 0.15F;
+    private static final int MAX_SCROLL_DEVIATION = 10;
+
     private MediaController.ControlListener controlListener;
-    private GestureDetector gestureDetector;
+    private final GestureDetector gestureDetector;
 
     private enum Status {PLAY, PAUSE}
 
+    private enum ScrollPlace {LEFT, RIGHT, OTHER}
+
     private Status status;
 
-    ControlDetector() {
+    private final View view;
+
+    ControlDetector(View view) {
+        this.view = view;
         this.status = Status.PLAY;
         gestureDetector = new GestureDetector(new Listener());
     }
@@ -29,6 +38,7 @@ class ControlDetector {
     }
 
     private class Listener extends GestureDetector.SimpleOnGestureListener {
+
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             Log.e(TAG, "onSingleTapUp: ");
@@ -44,8 +54,9 @@ class ControlDetector {
 
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            Log.e(TAG, "onScroll: ");
-            scroll();
+            Log.e(TAG, "onScroll: " + e1.getX() + " " + e2.getX()
+                    + "\t" + e1.getY() + " " + e2.getY() + "\t" + distanceX + " " + distanceY);
+            scroll(e1.getX(), e2.getX(), distanceY);
             return super.onScroll(e1, e2, distanceX, distanceY);
         }
 
@@ -131,9 +142,42 @@ class ControlDetector {
         }
     }
 
-    private void scroll() {
-        if (controlListener != null) {
-            controlListener.scroll();
+    private void scroll(float startX, float stopX, float distanceY) {
+        if (controlListener != null && (stopX - startX) < MAX_SCROLL_DEVIATION) {
+            final ScrollPlace scrollPlace = getScrollPlace(startX, stopX);
+            final int relativeDistance = getRelativeDistance(distanceY);
+            switch (scrollPlace) {
+                case LEFT:
+                    controlListener.brightness(relativeDistance);
+                    break;
+                case RIGHT:
+                    controlListener.volume(relativeDistance);
+                    break;
+                case OTHER:
+                    Log.e(TAG, "scroll: " + scrollPlace.name());
+            }
         }
+    }
+
+    private ScrollPlace getScrollPlace(float startX, float stopX) {
+        final ScrollPlace startTouch = getTouchPlace(startX);
+        final ScrollPlace stopTouch = getTouchPlace(stopX);
+        return startTouch.equals(stopTouch) ? startTouch : ScrollPlace.OTHER;
+    }
+
+    private ScrollPlace getTouchPlace(float pointX) {
+        final float width = view.getWidth();
+        if (pointX >= 0 && pointX <= width * SCROLL_PART) {
+            return ScrollPlace.LEFT;
+        }
+        if (pointX >= width * (1 - SCROLL_PART) && pointX <= width) {
+            return ScrollPlace.RIGHT;
+        }
+        return ScrollPlace.OTHER;
+    }
+
+    private int getRelativeDistance(float distanceY) {
+        final float height = view.getHeight();
+        return (int) (distanceY / height * 100);
     }
 }

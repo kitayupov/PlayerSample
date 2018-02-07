@@ -28,7 +28,7 @@ public class MediaController extends View {
     }
 
     private void initialize() {
-        controlDetector = new ControlDetector();
+        controlDetector = new ControlDetector(this);
     }
 
     @Override
@@ -50,6 +50,8 @@ public class MediaController extends View {
 
         void longClick();
 
-        void scroll();
+        void brightness(int value);
+
+        void volume(int value);
     }
 }

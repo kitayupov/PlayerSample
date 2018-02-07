@@ -10,6 +10,8 @@ public class MainActivity extends AppCompatActivity {
 
     private MediaController mediaController;
     private Toast toast;
+    private int brightness = 0;
+    private int volume = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +44,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void scroll() {
-            showMessage("scroll");
+        public void brightness(int value) {
+            brightness = Math.max(0, Math.min(brightness + value, 100));
+            showMessage("brightness " + brightness);
+        }
+
+        @Override
+        public void volume(int value) {
+            volume = Math.max(0, Math.min(volume + value, 100));
+            showMessage("volume " + volume);
         }
     };
 
