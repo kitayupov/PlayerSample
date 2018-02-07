@@ -9,7 +9,9 @@ class ControlDetector {
 
     private static final String TAG = MediaController.class.getSimpleName();
 
-    private static final float SCROLL_BORDER = 0.15F;
+    private static final float SCROLL_SEPARATOR = 0.15F;
+    private static final float DOUBLE_TAP_SEPARATOR = 0.40F;
+
     private static final int MAX_SCROLL_DEVIATION = 10;
 
     private MediaController.ControlListener controlListener;
@@ -17,9 +19,9 @@ class ControlDetector {
 
     private enum Status {PLAY, PAUSE}
 
-    private enum TouchPlace {LEFT, RIGHT, CENTER}
-
     private Status status;
+
+    private enum TouchPlace {LEFT, RIGHT, CENTER}
 
     private final View view;
 
@@ -132,7 +134,7 @@ class ControlDetector {
 
     private void doubleTap(float pointX) {
         if (controlListener != null) {
-            final TouchPlace touchPlace = getTouchPlace(pointX, 0.4F);
+            final TouchPlace touchPlace = getTouchPlace(pointX, DOUBLE_TAP_SEPARATOR);
             switch (touchPlace) {
                 case LEFT:
                     controlListener.jumpLeft();
@@ -170,8 +172,8 @@ class ControlDetector {
     }
 
     private TouchPlace getScrollPlace(float startX, float stopX) {
-        final TouchPlace startTouch = getTouchPlace(startX, SCROLL_BORDER);
-        final TouchPlace stopTouch = getTouchPlace(stopX, SCROLL_BORDER);
+        final TouchPlace startTouch = getTouchPlace(startX, SCROLL_SEPARATOR);
+        final TouchPlace stopTouch = getTouchPlace(stopX, SCROLL_SEPARATOR);
         return startTouch.equals(stopTouch) ? startTouch : TouchPlace.CENTER;
     }
 
