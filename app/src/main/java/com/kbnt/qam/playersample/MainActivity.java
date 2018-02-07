@@ -2,13 +2,13 @@ package com.kbnt.qam.playersample;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Toast;
 
 import com.kbnt.qam.mediacontroller.MediaController;
 
 public class MainActivity extends AppCompatActivity {
 
-    private MediaController mediaController;
     private Toast toast;
     private int brightness = 0;
     private int volume = 0;
@@ -18,8 +18,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mediaController = findViewById(R.id.mediaController);
-        mediaController.setControlListener(controlListener);
+        View layout = findViewById(R.id.layout);
+        layout.setOnTouchListener(new MediaController(controlListener));
     }
 
     private MediaController.ControlListener controlListener = new MediaController.ControlListener() {
