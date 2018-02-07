@@ -18,8 +18,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        View layout = findViewById(R.id.layout);
-        layout.setOnTouchListener(new MediaController(controlCallback));
+        final View layout = findViewById(R.id.layout);
+
+        final MediaController mediaController = new MediaController(controlCallback);
+        mediaController.setWindow(layout);
     }
 
     private MediaController.ControlCallback controlCallback = new MediaController.ControlCallback() {
