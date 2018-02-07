@@ -14,20 +14,21 @@ public class MediaController implements View.OnTouchListener {
 
     private static final int MAX_SCROLL_DEVIATION = 10;
 
-    private MediaController.ControlListener controlListener;
+    private ControlCallback controlCallback;
     private final GestureDetector gestureDetector;
 
     private enum TouchPlace {LEFT, RIGHT, CENTER}
 
     private enum Status {PLAY, PAUSE}
+
     private Status status;
 
     private View view;
 
-    public MediaController(ControlListener controlListener) {
+    public MediaController(ControlCallback controlCallback) {
         this.status = Status.PLAY;
-        this.controlListener = controlListener;
-        gestureDetector = new GestureDetector(new ControlDetector());
+        this.controlCallback = controlCallback;
+        gestureDetector = new GestureDetector(new ControlListener());
     }
 
     @Override
@@ -37,7 +38,7 @@ public class MediaController implements View.OnTouchListener {
         return true;
     }
 
-    private class ControlDetector extends GestureDetector.SimpleOnGestureListener {
+    private class ControlListener extends GestureDetector.SimpleOnGestureListener {
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
@@ -117,28 +118,28 @@ public class MediaController implements View.OnTouchListener {
     }
 
     private void play() {
-        if (controlListener != null) {
-            controlListener.play();
+        if (controlCallback != null) {
+            controlCallback.play();
             status = Status.PLAY;
         }
     }
 
     private void pause() {
-        if (controlListener != null) {
-            controlListener.pause();
+        if (controlCallback != null) {
+            controlCallback.pause();
             status = Status.PAUSE;
         }
     }
 
     private void doubleTap(float pointX) {
-        if (controlListener != null) {
+        if (controlCallback != null) {
             final TouchPlace touchPlace = getTouchPlace(pointX, DOUBLE_TAP_SEPARATOR);
             switch (touchPlace) {
                 case LEFT:
-                    controlListener.jumpLeft();
+                    controlCallback.jumpLeft();
                     break;
                 case RIGHT:
-                    controlListener.jumpRight();
+                    controlCallback.jumpRight();
                     break;
                 default:
                     Log.e(TAG, "doubleTap: " + touchPlace.name());
@@ -147,21 +148,21 @@ public class MediaController implements View.OnTouchListener {
     }
 
     private void longClick() {
-        if (controlListener != null) {
-            controlListener.longClick();
+        if (controlCallback != null) {
+            controlCallback.longClick();
         }
     }
 
     private void scroll(float startX, float stopX, float distanceY) {
-        if (controlListener != null && (stopX - startX) < MAX_SCROLL_DEVIATION) {
+        if (controlCallback != null && (stopX - startX) < MAX_SCROLL_DEVIATION) {
             final TouchPlace scrollPlace = getScrollPlace(startX, stopX);
             final int relativeDistance = getRelativeDistance(distanceY);
             switch (scrollPlace) {
                 case LEFT:
-                    controlListener.brightness(relativeDistance);
+                    controlCallback.brightness(relativeDistance);
                     break;
                 case RIGHT:
-                    controlListener.volume(relativeDistance);
+                    controlCallback.volume(relativeDistance);
                     break;
                 default:
                     Log.e(TAG, "scroll: " + scrollPlace.name());
@@ -191,7 +192,7 @@ public class MediaController implements View.OnTouchListener {
         return (int) (distanceY / height * 100);
     }
 
-    public interface ControlListener {
+    public interface ControlCallback {
         void play();
 
         void pause();

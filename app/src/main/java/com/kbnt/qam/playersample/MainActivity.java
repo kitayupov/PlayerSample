@@ -19,10 +19,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         View layout = findViewById(R.id.layout);
-        layout.setOnTouchListener(new MediaController(controlListener));
+        layout.setOnTouchListener(new MediaController(controlCallback));
     }
 
-    private MediaController.ControlListener controlListener = new MediaController.ControlListener() {
+    private MediaController.ControlCallback controlCallback = new MediaController.ControlCallback() {
         @Override
         public void play() {
             showMessage("play");
