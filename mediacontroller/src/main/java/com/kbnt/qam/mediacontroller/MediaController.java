@@ -33,8 +33,8 @@ public class MediaController extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        eventDetector.onTouchEvent(this, event);
-        return super.onTouchEvent(event);
+        eventDetector.onTouchEvent(event);
+        return true;
     }
 
     public void setControlListener(ControlListener controlListener) {
