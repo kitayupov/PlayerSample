@@ -17,33 +17,35 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mediaController = findViewById(R.id.mediaController);
-        mediaController.setControlListener(new MediaController.ControlListener() {
-            @Override
-            public void play() {
-                showMessage("play");
-            }
-
-            @Override
-            public void pause() {
-                showMessage("pause");
-            }
-
-            @Override
-            public void doubleTap() {
-                showMessage("doubleTap");
-            }
-
-            @Override
-            public void longClick() {
-                showMessage("longClick");
-            }
-
-            @Override
-            public void scroll() {
-                showMessage("scroll");
-            }
-        });
+        mediaController.setControlListener(controlListener);
     }
+
+    private MediaController.ControlListener controlListener = new MediaController.ControlListener() {
+        @Override
+        public void play() {
+            showMessage("play");
+        }
+
+        @Override
+        public void pause() {
+            showMessage("pause");
+        }
+
+        @Override
+        public void doubleTap() {
+            showMessage("doubleTap");
+        }
+
+        @Override
+        public void longClick() {
+            showMessage("longClick");
+        }
+
+        @Override
+        public void scroll() {
+            showMessage("scroll");
+        }
+    };
 
     private void showMessage(String message) {
         if (toast == null) {
