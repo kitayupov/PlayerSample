@@ -9,6 +9,7 @@ import com.kbnt.qam.mediacontroller.MediaController;
 public class MainActivity extends AppCompatActivity {
 
     private MediaController mediaController;
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +27,31 @@ public class MainActivity extends AppCompatActivity {
             public void pause() {
                 showMessage("pause");
             }
+
+            @Override
+            public void doubleTap() {
+                showMessage("doubleTap");
+            }
+
+            @Override
+            public void longClick() {
+                showMessage("longClick");
+            }
+
+            @Override
+            public void scroll() {
+                showMessage("scroll");
+            }
         });
     }
 
     private void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        if (toast == null) {
+            toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+            toast.show();
+        } else {
+            toast.setText(message);
+            toast.show();
+        }
     }
 }

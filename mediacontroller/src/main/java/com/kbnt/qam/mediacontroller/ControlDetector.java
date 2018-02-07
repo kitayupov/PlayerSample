@@ -4,7 +4,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
-class EventDetector {
+class ControlDetector {
 
     private static final String TAG = MediaController.class.getSimpleName();
 
@@ -15,7 +15,7 @@ class EventDetector {
 
     private Status status;
 
-    EventDetector() {
+    ControlDetector() {
         this.status = Status.PLAY;
         gestureDetector = new GestureDetector(new Listener());
     }
@@ -38,12 +38,14 @@ class EventDetector {
         @Override
         public void onLongPress(MotionEvent e) {
             Log.e(TAG, "onLongPress: ");
+            longClick();
             super.onLongPress(e);
         }
 
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
             Log.e(TAG, "onScroll: ");
+            scroll();
             return super.onScroll(e1, e2, distanceX, distanceY);
         }
 
@@ -68,6 +70,7 @@ class EventDetector {
         @Override
         public boolean onDoubleTap(MotionEvent e) {
             Log.e(TAG, "onDoubleTap: ");
+            doubleTap();
             return super.onDoubleTap(e);
         }
 
@@ -80,14 +83,7 @@ class EventDetector {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             Log.e(TAG, "onSingleTapConfirmed: ");
-            switch (status) {
-                case PLAY:
-                    pause();
-                    break;
-                case PAUSE:
-                    play();
-                    break;
-            }
+            singleTap();
             return super.onSingleTapConfirmed(e);
         }
 
@@ -95,6 +91,17 @@ class EventDetector {
         public boolean onContextClick(MotionEvent e) {
             Log.e(TAG, "onContextClick: ");
             return super.onContextClick(e);
+        }
+    }
+
+    private void singleTap() {
+        switch (status) {
+            case PLAY:
+                pause();
+                break;
+            case PAUSE:
+                play();
+                break;
         }
     }
 
@@ -109,6 +116,24 @@ class EventDetector {
         if (controlListener != null) {
             controlListener.pause();
             status = Status.PAUSE;
+        }
+    }
+
+    private void doubleTap() {
+        if (controlListener != null) {
+            controlListener.doubleTap();
+        }
+    }
+
+    private void longClick() {
+        if (controlListener != null) {
+            controlListener.longClick();
+        }
+    }
+
+    private void scroll() {
+        if (controlListener != null) {
+            controlListener.scroll();
         }
     }
 }

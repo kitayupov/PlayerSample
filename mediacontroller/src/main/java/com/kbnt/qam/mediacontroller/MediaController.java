@@ -8,7 +8,7 @@ import android.view.View;
 
 public class MediaController extends View {
 
-    private EventDetector eventDetector;
+    private ControlDetector controlDetector;
 
     public MediaController(Context context) {
         this(context, null);
@@ -28,22 +28,28 @@ public class MediaController extends View {
     }
 
     private void initialize() {
-        eventDetector = new EventDetector();
+        controlDetector = new ControlDetector();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        eventDetector.onTouchEvent(event);
+        controlDetector.onTouchEvent(event);
         return true;
     }
 
     public void setControlListener(ControlListener controlListener) {
-        eventDetector.setControlListener(controlListener);
+        controlDetector.setControlListener(controlListener);
     }
 
     public interface ControlListener {
         void play();
 
         void pause();
+
+        void doubleTap();
+
+        void longClick();
+
+        void scroll();
     }
 }
