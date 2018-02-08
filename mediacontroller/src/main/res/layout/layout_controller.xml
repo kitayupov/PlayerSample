@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#3000"
@@ -69,34 +68,29 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            android:id="@+id/x1"
+        <ImageButton
+            android:id="@+id/speedMinus"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_marginEnd="8dp"
             android:background="#1000"
-            android:gravity="center"
-            android:text="1x"
-            android:textColor="#fff" />
+            android:src="@drawable/minus" />
 
         <TextView
-            android:id="@+id/x2"
-            android:layout_width="32dp"
+            android:id="@+id/speedCurrent"
+            android:layout_width="48dp"
             android:layout_height="32dp"
-            android:layout_marginEnd="8dp"
             android:background="#1000"
             android:gravity="center"
-            android:text="2x"
+            android:text="1.0x"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:textColor="#fff" />
 
-        <TextView
-            android:id="@+id/x4"
+        <ImageButton
+            android:id="@+id/speedPlus"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:background="#1000"
-            android:gravity="center"
-            android:text="4x"
-            android:textColor="#fff" />
+            android:src="@drawable/plus" />
 
     </LinearLayout>
 

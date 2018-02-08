@@ -35,15 +35,15 @@ public class MediaController extends FrameLayout {
     }
 
     private void setControllers(View root) {
-        root.findViewById(R.id.x1).setOnClickListener(listener);
-        root.findViewById(R.id.x2).setOnClickListener(listener);
-        root.findViewById(R.id.x4).setOnClickListener(listener);
+        root.findViewById(R.id.speedMinus).setOnClickListener(listener);
+        root.findViewById(R.id.speedCurrent).setOnClickListener(listener);
+        root.findViewById(R.id.speedPlus).setOnClickListener(listener);
     }
 
     private OnClickListener listener = new OnClickListener() {
         @Override
-        public void onClick(View v) {
-            System.out.println(v.getId());
+        public void onClick(View view) {
+            System.out.println(view.getId());
         }
     };
 
