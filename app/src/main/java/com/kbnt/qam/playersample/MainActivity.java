@@ -2,7 +2,6 @@ package com.kbnt.qam.playersample;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Toast;
 
 import com.kbnt.qam.mediacontroller.MediaController;
@@ -10,7 +9,6 @@ import com.kbnt.qam.mediacontroller.MediaController;
 public class MainActivity extends AppCompatActivity {
 
     private Toast toast;
-    private int brightness = 0;
     private int volume = 0;
 
     @Override
@@ -36,12 +34,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void longClick() {
             showMessage("longClick");
-        }
-
-        @Override
-        public void brightness(int value) {
-            brightness = Math.max(0, Math.min(brightness + value, 100));
-            showMessage("brightness " + brightness);
         }
 
         @Override

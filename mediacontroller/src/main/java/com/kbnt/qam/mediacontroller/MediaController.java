@@ -1,5 +1,6 @@
 package com.kbnt.qam.mediacontroller;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.widget.FrameLayout;
 public class MediaController extends FrameLayout {
 
     private SpeedControls speedControls;
+    private ActionController actionController;
 
     public MediaController(@NonNull Context context) {
         this(context, null);
@@ -20,15 +22,21 @@ public class MediaController extends FrameLayout {
 
     public MediaController(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        initialize(context);
+        setControllers(context);
+        initView(context);
+    }
+
+    private void setControllers(Context context) {
+        actionController = new ActionController((Activity) context);
     }
 
     public void setControlCallback(ControlCallback controlCallback) {
-        setOnTouchListener(new ActionController(controlCallback));
         speedControls.setControlCallback(controlCallback);
+        actionController.setControlCallback(controlCallback);
+        setOnTouchListener(actionController);
     }
 
-    private void initialize(Context context) {
+    private void initView(Context context) {
         final LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View root = inflate.inflate(R.layout.layout_controller, null);
         final LayoutParams layoutParams = new LayoutParams(
@@ -44,8 +52,6 @@ public class MediaController extends FrameLayout {
         void pause();
 
         void longClick();
-
-        void brightness(int value);
 
         void volume(int value);
 

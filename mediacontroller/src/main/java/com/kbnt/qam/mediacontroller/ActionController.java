@@ -1,5 +1,6 @@
 package com.kbnt.qam.mediacontroller;
 
+import android.app.Activity;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -14,8 +15,14 @@ public class ActionController implements View.OnTouchListener {
 
     private static final int MAX_SCROLL_DEVIATION = 10;
 
+    private final BrightnessController brightnessController;
+
     private MediaController.ControlCallback controlCallback;
-    private final GestureDetector gestureDetector;
+    private GestureDetector gestureDetector;
+
+    ActionController(Activity activity) {
+        brightnessController = new BrightnessController(activity);
+    }
 
     private enum TouchPlace {LEFT, RIGHT, CENTER}
 
@@ -25,7 +32,7 @@ public class ActionController implements View.OnTouchListener {
 
     private View view;
 
-    ActionController(MediaController.ControlCallback controlCallback) {
+    void setControlCallback(MediaController.ControlCallback controlCallback) {
         this.status = Status.PLAY;
         this.controlCallback = controlCallback;
         gestureDetector = new GestureDetector(new ControlListener());
@@ -159,7 +166,7 @@ public class ActionController implements View.OnTouchListener {
             final int relativeDistance = getRelativeDistance(distanceY);
             switch (scrollPlace) {
                 case LEFT:
-                    controlCallback.brightness(relativeDistance);
+                    brightnessController.setBrightness(relativeDistance);
                     break;
                 case RIGHT:
                     controlCallback.volume(relativeDistance);
