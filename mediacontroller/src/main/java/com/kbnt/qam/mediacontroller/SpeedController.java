@@ -33,7 +33,7 @@ class SpeedController {
 
     private void setSpeed(float value) {
         speed = Math.max(MIN_SPEED, Math.min(value, MAX_SPEED));
-        if (controlCallback != null && speed != value) {
+        if (controlCallback != null && speed == value) {
             controlCallback.setSpeed(speed);
         }
     }
