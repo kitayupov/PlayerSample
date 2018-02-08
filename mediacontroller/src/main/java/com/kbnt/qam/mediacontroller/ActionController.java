@@ -165,7 +165,7 @@ public class ActionController implements View.OnTouchListener {
     private void scroll(float startX, float stopX, float distanceY) {
         if (controlCallback != null && (stopX - startX) < MAX_SCROLL_DEVIATION) {
             final TouchPlace scrollPlace = getScrollPlace(startX, stopX);
-            final int relativeDistance = getRelativeDistance(distanceY);
+            final float relativeDistance = getRelativeDistance(distanceY);
             switch (scrollPlace) {
                 case LEFT:
                     brightnessController.setBrightness(relativeDistance);
@@ -196,8 +196,8 @@ public class ActionController implements View.OnTouchListener {
         return TouchPlace.CENTER;
     }
 
-    private int getRelativeDistance(float distanceY) {
+    private float getRelativeDistance(float distanceY) {
         final float height = view.getHeight();
-        return (int) (distanceY / height * 100);
+        return distanceY / height;
     }
 }
