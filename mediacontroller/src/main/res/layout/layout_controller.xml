@@ -81,7 +81,7 @@
             android:layout_height="32dp"
             android:background="#1000"
             android:gravity="center"
-            android:text="1.0x"
+            android:hint="@string/speed"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:textColor="#fff" />
 
