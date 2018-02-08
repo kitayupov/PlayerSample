@@ -16,12 +16,14 @@ public class ActionController implements View.OnTouchListener {
     private static final int MAX_SCROLL_DEVIATION = 10;
 
     private final BrightnessController brightnessController;
+    private final VolumeController volumeController;
 
     private MediaController.ControlCallback controlCallback;
     private GestureDetector gestureDetector;
 
     ActionController(Activity activity) {
         brightnessController = new BrightnessController(activity);
+        volumeController = new VolumeController(activity);
     }
 
     private enum TouchPlace {LEFT, RIGHT, CENTER}
@@ -169,7 +171,7 @@ public class ActionController implements View.OnTouchListener {
                     brightnessController.setBrightness(relativeDistance);
                     break;
                 case RIGHT:
-                    controlCallback.volume(relativeDistance);
+                    volumeController.setVolume(relativeDistance);
                     break;
                 default:
                     Log.e(TAG, "scroll: " + scrollPlace.name());

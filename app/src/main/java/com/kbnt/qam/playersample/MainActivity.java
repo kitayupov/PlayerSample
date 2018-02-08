@@ -9,7 +9,6 @@ import com.kbnt.qam.mediacontroller.MediaController;
 public class MainActivity extends AppCompatActivity {
 
     private Toast toast;
-    private int volume = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +33,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void longClick() {
             showMessage("longClick");
-        }
-
-        @Override
-        public void volume(int value) {
-            volume = Math.max(0, Math.min(volume + value, 100));
-            showMessage("volume " + volume);
         }
 
         @Override

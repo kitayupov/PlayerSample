@@ -53,8 +53,6 @@ public class MediaController extends FrameLayout {
 
         void longClick();
 
-        void volume(int value);
-
         void jumpLeft();
 
         void jumpRight();
