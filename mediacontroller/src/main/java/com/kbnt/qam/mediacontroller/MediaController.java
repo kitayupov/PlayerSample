@@ -8,8 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import java.util.Locale;
 
 public class MediaController extends FrameLayout {
+
+    private SpeedController speedController;
+    private TextView currentSpeedTextView;
 
     public MediaController(@NonNull Context context) {
         this(context, null);
@@ -17,11 +23,13 @@ public class MediaController extends FrameLayout {
 
     public MediaController(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        speedController = new SpeedController();
         initialize(context);
     }
 
     public void setControlCallback(ControlCallback controlCallback) {
         setOnTouchListener(new ActionController(controlCallback));
+        speedController.setControlCallback(controlCallback);
     }
 
     private void initialize(Context context) {
@@ -35,17 +43,41 @@ public class MediaController extends FrameLayout {
     }
 
     private void setControllers(View root) {
-        root.findViewById(R.id.speedMinus).setOnClickListener(listener);
-        root.findViewById(R.id.speedCurrent).setOnClickListener(listener);
-        root.findViewById(R.id.speedPlus).setOnClickListener(listener);
+        currentSpeedTextView = root.findViewById(R.id.speedCurrent);
+        currentSpeedTextView.setOnClickListener(currentSpeedListener);
+        root.findViewById(R.id.speedMinus).setOnClickListener(speedDecreaseListener);
+        root.findViewById(R.id.speedPlus).setOnClickListener(speedIncreaseListener);
+        printCurrentSpeed();
     }
 
-    private OnClickListener listener = new OnClickListener() {
+    private OnClickListener currentSpeedListener = new OnClickListener() {
         @Override
-        public void onClick(View view) {
-            System.out.println(view.getId());
+        public void onClick(View v) {
+            speedController.reset();
+            printCurrentSpeed();
         }
     };
+
+    private OnClickListener speedDecreaseListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            speedController.decrease();
+            printCurrentSpeed();
+        }
+    };
+
+    private OnClickListener speedIncreaseListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            speedController.increase();
+            printCurrentSpeed();
+        }
+    };
+
+    private void printCurrentSpeed() {
+        if (speedController != null)
+            currentSpeedTextView.setText(String.format(Locale.ROOT, "%.1fx", speedController.getSpeed()));
+    }
 
     public interface ControlCallback {
         void play();
@@ -61,5 +93,7 @@ public class MediaController extends FrameLayout {
         void jumpLeft();
 
         void jumpRight();
+
+        void setSpeed(float value);
     }
 }

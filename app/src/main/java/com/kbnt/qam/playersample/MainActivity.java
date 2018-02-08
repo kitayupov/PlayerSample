@@ -59,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
         public void jumpRight() {
             showMessage("jumpRight");
         }
+
+        @Override
+        public void setSpeed(float value) {
+            showMessage("setSpeed: " + value);
+        }
     };
 
     private void showMessage(String message) {
